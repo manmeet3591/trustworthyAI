@@ -1,3 +1,23 @@
+# Testing
+
+sudo docker pull continuumio/anaconda3
+
+conda create -n py36 python=3.6
+
+source activate py36
+
+pip install -r requirements.txt
+
+cd home
+
+git clone https://github.com/manmeet3591/trustworthyAI
+
+cd trustworthyAI/Causal_Structure_Learning/Causal_Discovery_RL
+
+wget https://cran.r-project.org/src/contrib/Archive/CAM/CAM_1.0.tar.gz
+
+python setup_CAM.py
+
 # Trustworthy AI
 
 This repository aims to include trustworthy AI related projects from Huawei Noah's Ark Lab.  
