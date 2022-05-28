@@ -2,11 +2,11 @@
 
 sudo docker pull continuumio/anaconda3
 
+sudo run -it continuumio/anaconda3
+
 conda create -n py36 python=3.6
 
 source activate py36
-
-pip install -r requirements.txt
 
 cd home
 
@@ -16,7 +16,57 @@ cd trustworthyAI/Causal_Structure_Learning/Causal_Discovery_RL
 
 wget https://cran.r-project.org/src/contrib/Archive/CAM/CAM_1.0.tar.gz
 
+pip install -r requirements.txt
+
+apt-get install r-base
+
 python setup_CAM.py
+
+cd src
+
+git clone https://github.com/zhushy/causal-datasets
+
+mv causal-datasets/Causal_Discovery_RL/synthetic_datasets.zip .
+
+unzip synthetic_datasets.zip
+
+python main.py  --max_length 12 \
+                --data_size 5000 \
+                --score_type BIC \
+                --reg_type LR \
+                --read_data  \
+                --transpose \
+                --data_path synthetic_datasets/exp1_12nodes/gauss_diff_noise/1/ \ # contains data.npy which is required
+                --lambda_flag_default \
+                --nb_epoch 20000 \
+                --input_dimension 64 \
+                --lambda_iter_num 1000
+
+# To push the container to docker hub
+
+In a new terminal
+
+sudo docker ps -a # Note down the container_id of the running container 
+
+sudo docker commit eb4634e3d10f crl_working # make a new image out of the container
+
+sudo docker login # login to docker hub to push the image
+
+sudo docker tag crl_working:latest manmeet3591/causal_reinforcement_learning:firstimagepush
+
+sudo docker push manmeet3591/causal_reinforcement_learning:firstimagepush
+
+https://hub.docker.com/repository/docker/manmeet3591/causal_reinforcement_learning
+
+# To start the jupyter notebook in the container
+
+not required for causal reinforcement learning
+
+jupyter notebook --ip=0.0.0.0 --allow-root &
+
+sudo docker inspect container_id # In another terminal on root
+
+https://(ip_address_of_container):port
 
 # Trustworthy AI
 
